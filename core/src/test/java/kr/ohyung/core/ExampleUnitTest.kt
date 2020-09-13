@@ -1,4 +1,4 @@
-package kr.ohyung.mvi
+package kr.ohyung.core
 
 import org.junit.Test
 
