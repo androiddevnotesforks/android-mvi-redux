@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-    implementation project(':core')
+    implementation project(':core-mvi')
 
     // Android, Kotlin Libraries
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -66,7 +66,7 @@ dependencies {
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.28.3-alpha'
     kapt 'com.google.dagger:hilt-android-compiler:2.28.3-alpha'
 
-    // Hilt-Dagger
+    // Hilt - ViewModel
     implementation 'androidx.hilt:hilt-common:1.0.0-alpha02'
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
     kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
