@@ -26,19 +26,12 @@ import kotlin.test.assertTrue
 
 class GetPhotoSummariesTest : UseCaseTest() {
 
-    @get:Rule
-    val mockitoRule: MockitoRule = MockitoJUnit.rule()
-
-    @get:Rule
-    val expectException: ExpectedException = ExpectedException.none()
-
-    private lateinit var testExecutors: ExecutorProvider
     private lateinit var mockPhotoSummary: PhotoSummary
     private lateinit var normalPhotoSummary: PhotoSummary
     private lateinit var getPhotoSummaries: GetPhotoSummaries
 
     @Mock
-    lateinit var photoRepository: PhotoRepository
+    private lateinit var photoRepository: PhotoRepository
 
     override fun setup() {
         super.setup()
@@ -62,7 +55,7 @@ class GetPhotoSummariesTest : UseCaseTest() {
     }
 
     @Test(expected = NoParamsException::class)
-    fun `params가 null일때 에러 발생 여부 테스트`() {
+    fun `params 가 null 일때 에러 발생 여부 테스트`() {
         getPhotoSummaries.execute(params = null)
     }
 
@@ -101,24 +94,14 @@ class GetPhotoSummariesTest : UseCaseTest() {
     @Test
     fun `인기순으로 가져오기 테스트`() {
         val params = PhotoParams(orderBy = OrderBy.POPULAR)
+        val copiedList = List(10) { integer -> normalPhotoSummary.copy(likes = integer * 10) }
 
         `when`(photoRepository.getPhotos(page = params.page, perPage = params.perPage, params.orderBy))
-            .thenReturn(Single.just(listOf( // size = 10
-                normalPhotoSummary.copy(likes = 10),
-                normalPhotoSummary.copy(likes = 20),
-                normalPhotoSummary.copy(likes = 34),
-                normalPhotoSummary.copy(likes = 80),
-                normalPhotoSummary.copy(likes = 110),
-                normalPhotoSummary.copy(likes = 230),
-                normalPhotoSummary.copy(likes = 96),
-                normalPhotoSummary.copy(likes = 12304),
-                normalPhotoSummary.copy(likes = 111),
-                normalPhotoSummary.copy(likes = 15),
-            )))
+            .thenReturn(Single.just(copiedList))
 
         val result = getPhotoSummaries.execute(params = params).blockingGet()
         assertEquals(params.perPage, result.size)
-        assertEquals(10, result.minOf { it.likes })
-        assertEquals(12304, result.maxOf { it.likes })
+        assertEquals(0, result.minOf { it.likes })
+        assertEquals(90, result.maxOf { it.likes })
     }
 }
