@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#FCF8F4</color>
+    <color name="colorPrimaryDark">#FCF8F4</color>
+    <color name="colorAccent">#8EC4EE</color>
+
+    <color name="color_background">#FCF8F4</color>
+
+    <color name="sky">#8EC4EE</color>
+    <color name="orange">#F29166</color>
+    <color name="green">#6D8E60</color>
+    <color name="pink">#F2ABAF</color>
+    <color name="brown">#B5916B</color>
+
+    <color name="white_900">#ffffff</color>
+    <color name="white_900_alpha50">#80FFFFFF</color>
+
+    <color name="beige_300">#FCF8F4</color>
+    <color name="beige_500">#F4EDE5</color>
+
+    <color name="black_900">#000000</color>
+    <color name="black_600">#383838</color>
+    <color name="black_300">#3B3B3B</color>
+
+    <color name="gray_000">#FFFFFF</color>
+    <color name="gray_100">#EDEDED</color>
+    <color name="gray_200">#E0E0E0</color>
+    <color name="gray_300">#CACACA</color>
+    <color name="gray_400">#B4B4B4</color>
+    <color name="gray_500">#9C9C9C</color>
+    <color name="gray_600">#858585</color>
+    <color name="gray_700">#707070</color>
+    <color name="gray_800">#575757</color>
+    <color name="gray_900">#424242</color>
+
 </resources>

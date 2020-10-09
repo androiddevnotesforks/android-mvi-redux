@@ -5,6 +5,8 @@ package kr.ohyung.mvi.splash
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -15,6 +17,7 @@ import kr.ohyung.mvi.R
 import kr.ohyung.mvi.databinding.FragmentSplashBinding
 import kr.ohyung.mvi.splash.mvi.SplashViewIntent
 import kr.ohyung.mvi.splash.mvi.SplashViewState
+import org.jetbrains.anko.support.v4.toast
 
 @AndroidEntryPoint
 class SplashFragment : BaseFragment<FragmentSplashBinding,
@@ -32,7 +35,10 @@ class SplashFragment : BaseFragment<FragmentSplashBinding,
 
     override fun render(state: SplashViewState) {
         if(state.isLoading) {
-            // TODO : show progress bar
+            binding.progressBar.isVisible = true
+        }
+        if(state.error != null){
+            toast(state.error.message.toString())
         }
     }
 
