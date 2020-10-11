@@ -13,7 +13,13 @@ class SplashViewStateReducer @Inject constructor(): ViewStateReducer<SplashViewS
     override fun reduce() = BiFunction { oldState: SplashViewState, result: SplashViewResult ->
         when(result) {
             SplashViewResult.Loading -> oldState.copy(isLoading = true)
-            SplashViewResult.Success -> oldState.copy(isLoading = false, error = null)
+            is SplashViewResult.Success -> {
+                if(result.imageUrl != null) {
+                    oldState.copy(isLoading = false, timerEnd = result.timerEnd, imageUrl = result.imageUrl)
+                } else {
+                    oldState.copy(isLoading = false, timerEnd = result.timerEnd, imageUrl = null)
+                }
+            }
             is SplashViewResult.Error -> oldState.copy(isLoading = false, error = result.throwable)
         }
     }

@@ -11,8 +11,9 @@ import kr.ohyung.domain.entity.OrderBy
 import kr.ohyung.domain.entity.PhotoSummary
 import kr.ohyung.domain.exception.Externals
 import kr.ohyung.domain.repository.PhotoRepository
+import javax.inject.Inject
 
-class PhotoRepositoryImpl(
+class PhotoRepositoryImpl @Inject constructor(
     private val photoRemoteDataSource: PhotoRemoteDataSource,
     private val photoEntityMapper: PhotoEntityMapper
 ) : PhotoRepository {
@@ -24,6 +25,19 @@ class PhotoRepositoryImpl(
                 val errorType = when(throwable) {
                     is NetworkException.BadRequestException -> Externals.BadRequestException(throwable.message)
                     else -> Exception(throwable)
+                }
+                Single.error(errorType)
+            }
+
+    override fun getRandomPhoto(query: String): Single<PhotoSummary> =
+        photoRemoteDataSource.getRandomPhoto(query = query)
+            .map { photoDataModel -> photoEntityMapper.toEntity(photoDataModel) }
+            .onErrorResumeNext { throwable ->
+                val errorType = when(throwable) {
+                    is NetworkException.BadRequestException -> Externals.BadRequestException(throwable.message) // 400
+                    is NetworkException.UnauthorizedException -> Externals.UnauthorizedException(throwable.message) // 401
+                    is NetworkException.NotFoundException -> Externals.NotFoundException(throwable.message) // 404
+                    else -> Exception(throwable) // etc
                 }
                 Single.error(errorType)
             }

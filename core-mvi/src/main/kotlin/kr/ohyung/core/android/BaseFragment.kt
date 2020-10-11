@@ -30,6 +30,6 @@ abstract class BaseFragment<V: ViewDataBinding, I: ViewIntent, S: ViewState>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        processIntents()
+        subscribeIntents()
     }
 }

@@ -5,8 +5,9 @@ package kr.ohyung.data.mapper
 
 import kr.ohyung.data.model.PhotoSummaryDataModel
 import kr.ohyung.domain.entity.PhotoSummary
+import javax.inject.Inject
 
-class PhotoEntityMapper : EntityMapper<PhotoSummaryDataModel, PhotoSummary> {
+class PhotoEntityMapper @Inject constructor() : EntityMapper<PhotoSummaryDataModel, PhotoSummary> {
     override fun toEntity(dataModel: PhotoSummaryDataModel) = with(dataModel) {
         PhotoSummary(
             id = id,
@@ -15,6 +16,7 @@ class PhotoEntityMapper : EntityMapper<PhotoSummaryDataModel, PhotoSummary> {
             color = color,
             description = description,
             thumbnail = thumbnail,
+            regularImageUrl = regularImageUrl,
             likes = likes,
             username = username
         )
@@ -28,6 +30,7 @@ class PhotoEntityMapper : EntityMapper<PhotoSummaryDataModel, PhotoSummary> {
             color = color,
             description = description,
             thumbnail = thumbnail,
+            regularImageUrl = regularImageUrl,
             likes = likes,
             username = username
         )

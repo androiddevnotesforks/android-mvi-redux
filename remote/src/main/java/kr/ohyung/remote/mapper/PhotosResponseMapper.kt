@@ -6,8 +6,10 @@ package kr.ohyung.remote.mapper
 import kr.ohyung.data.model.PhotoSummaryDataModel
 import kr.ohyung.remote.ResponseMapper
 import kr.ohyung.remote.response.PhotosResponse
+import javax.inject.Inject
 
-class PhotosResponseMapper : ResponseMapper<PhotosResponse, PhotoSummaryDataModel> {
+class PhotosResponseMapper @Inject constructor(
+) : ResponseMapper<PhotosResponse, PhotoSummaryDataModel> {
     override fun toDataModel(response: PhotosResponse) =
         PhotoSummaryDataModel(
             id = response.id,
@@ -16,6 +18,7 @@ class PhotosResponseMapper : ResponseMapper<PhotosResponse, PhotoSummaryDataMode
             color = response.color,
             description = response.description ?: "",
             thumbnail = response.urls.thumb ?: "",
+            regularImageUrl = response.urls.regular ?: "",
             likes = response.likes,
             username = response.user.username
         )

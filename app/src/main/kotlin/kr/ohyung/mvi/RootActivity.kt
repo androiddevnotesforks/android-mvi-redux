@@ -7,7 +7,6 @@ import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kr.ohyung.mvi.databinding.ActivityRootBinding
 import kr.ohyung.mvi.splash.SplashFragmentArgs
-import kr.ohyung.mvi.utility.Constants
 
 @AndroidEntryPoint
 class RootActivity : AppCompatActivity() {
@@ -19,7 +18,16 @@ class RootActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_root)
         binding.lifecycleOwner = this
 
-        val startArgs = SplashFragmentArgs(Constants.DURATION_SPLASH).toBundle()
-        findNavController(R.id.nav_host_fragment).setGraph(R.navigation.nav_graph, startArgs)
+        val startArgs = SplashFragmentArgs(SPLASH_DURATION, SPLASH_IMAGE_QUERY).toBundle()
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.setGraph(R.navigation.nav_graph, startArgs)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            // can set about state bar or action bar, etc when navigating fragments.
+        }
+    }
+
+    companion object {
+        private const val SPLASH_DURATION: Long = 2500L
+        private const val SPLASH_IMAGE_QUERY: String = "weather"
     }
 }
