@@ -16,7 +16,8 @@ internal object MockData {
             color = "컬러 없음",
             description = "설명없음",
             thumbnail = "썸네일 없음",
-            regularImageUrl = "N/A",
+            fullSizeImageUrl = "N/A",
+            regularSizeImageUrl = "N/A",
             likes = 10224,
             username = "이오형"
         )
@@ -34,7 +35,7 @@ internal object MockData {
             alt_description = "대체 설명",
             urls = UrlsResponse(
                 raw = null,
-                full = null,
+                full = "N/A",
                 regular = "N/A",
                 small = null,
                 thumb = "썸네일 없음"

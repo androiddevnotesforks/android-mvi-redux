@@ -1,4 +1,4 @@
-package kr.ohyung.mvi.di
+package kr.ohyung.data.di
 
 import dagger.Module
 import dagger.Provides
@@ -21,6 +21,6 @@ object UseCaseModule {
     ): GetRandomPhotoUseCase = GetRandomPhotoUseCase(
         photoRepository = photoRepository,
         executorThread = executorProvider.io(),
-        postExecutionThread = executorProvider.main()
+        postExecutionThread = executorProvider.mainThread()
     )
 }

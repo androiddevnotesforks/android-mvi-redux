@@ -3,20 +3,20 @@ package kr.ohyung.mvi.di
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.components.ApplicationComponent
 import kr.ohyung.core.mvi.ActionProcessor
 import kr.ohyung.core.mvi.IntentProcessor
 import kr.ohyung.domain.executor.ExecutorProvider
 import kr.ohyung.domain.usecase.GetRandomPhotoUseCase
 import kr.ohyung.mvi.splash.mvi.SplashViewAction
 import kr.ohyung.mvi.splash.mvi.SplashViewIntent
-import kr.ohyung.mvi.splash.processor.SplashActionProcessor
 import kr.ohyung.mvi.splash.mvi.SplashViewResult
+import kr.ohyung.mvi.splash.processor.SplashActionProcessor
 import kr.ohyung.mvi.splash.processor.SplashIntentProcessor
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityRetainedComponent::class)
+@InstallIn(ApplicationComponent::class)
 object ProcessorModule {
 
     @Provides
@@ -26,6 +26,7 @@ object ProcessorModule {
     @Provides
     @Singleton
     fun provideSplashActionProcessor(
-        getRandomPhotoUseCase: GetRandomPhotoUseCase
-    ): ActionProcessor<SplashViewAction, SplashViewResult> = SplashActionProcessor(getRandomPhotoUseCase)
+        getRandomPhotoUseCase: GetRandomPhotoUseCase,
+        executorProvider: ExecutorProvider
+    ): ActionProcessor<SplashViewAction, SplashViewResult> = SplashActionProcessor(getRandomPhotoUseCase, executorProvider)
 }

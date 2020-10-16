@@ -7,21 +7,27 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
-import kr.ohyung.core.android.BaseFragment
+import io.reactivex.subjects.PublishSubject
+import kr.ohyung.core.android.BaseMviFragment
 import kr.ohyung.mvi.R
 import kr.ohyung.mvi.databinding.FragmentSplashBinding
 import kr.ohyung.mvi.splash.mvi.SplashViewIntent
 import kr.ohyung.mvi.splash.mvi.SplashViewState
-import kr.ohyung.mvi.utility.*
+import kr.ohyung.mvi.utility.load
+import kr.ohyung.mvi.utility.setOnDrawableListener
+import kr.ohyung.mvi.utility.setTransparentStatusBar
+import kr.ohyung.mvi.utility.toast
 
 @AndroidEntryPoint
-class SplashFragment : BaseFragment<FragmentSplashBinding,
+class SplashFragment : BaseMviFragment<FragmentSplashBinding,
         SplashViewIntent, SplashViewState>(R.layout.fragment_splash) {
 
+    private val toHomeScreenSubject = PublishSubject.create<SplashViewIntent.ToHomeScreen>()
     private val args by navArgs<SplashFragmentArgs>()
     private val splashViewModel by navGraphViewModels<SplashViewModel>(R.id.nav_graph) {
         defaultViewModelProviderFactory
@@ -40,13 +46,14 @@ class SplashFragment : BaseFragment<FragmentSplashBinding,
         if(state.imageUrl.isNullOrEmpty().not()) {
             binding.ivSplashImage.load(state.imageUrl) {
                 centerCrop()
-                setOnLoadFailedListener { binding.progressBar.isVisible = false }
-                setOnResourceReadyListener { binding.progressBar.isVisible = false }
+                setOnDrawableListener {
+                    binding.progressBar.isVisible = false
+                    toHomeScreenSubject.onNext(SplashViewIntent.ToHomeScreen(duration = args.duration))
+                }
             }
         }
         if(state.timerEnd) {
-            // Home 화면으로 이동
-            //findNavController().navigate()
+            findNavController().navigate(SplashFragmentDirections.toBottomNavigationFragment())
         }
         if(state.error != null){
             toast(state.error.message.toString())
@@ -54,7 +61,10 @@ class SplashFragment : BaseFragment<FragmentSplashBinding,
     }
 
     override val intents: Observable<SplashViewIntent>
-        get() = Observable.just(SplashViewIntent.InitialIntent(duration = args.duration, query = args.query))
+        get() = Observable.merge(
+            Observable.just(SplashViewIntent.FetchImage(query = args.query)),
+            toHomeScreenSubject
+        )
 
     override fun subscribeIntents() = splashViewModel.subscribeIntents(intents)
 }

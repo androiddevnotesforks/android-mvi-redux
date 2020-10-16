@@ -8,6 +8,10 @@ on:
     branches:
       - '*'
 
+env:
+  BASEURL: ${{ secrets.BASE_URL }}
+  CLIENTID: ${{ secrets.CLIENTID }}
+
 jobs:
   ci:
     name: Run Unit Test
@@ -21,4 +25,4 @@ jobs:
          java-version: 1.8
      
      - name: Unit Test
-       run: bash ./gradlew test --stacktrace
+       run: bash ./gradlew assembleDebug --stacktrace
