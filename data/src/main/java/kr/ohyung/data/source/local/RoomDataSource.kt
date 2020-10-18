@@ -9,10 +9,11 @@ import io.reactivex.Single
 import io.reactivex.SingleTransformer
 import kr.ohyung.data.exception.DatabaseException
 import kr.ohyung.data.model.DataModel
+import kr.ohyung.data.source.DataSource
 import kr.ohyung.domain.exception.DuplicatedEntityException
 import kr.ohyung.domain.exception.EntityNotFoundException
 
-interface LocalDataSource<D: DataModel> {
+interface RoomDataSource<D: DataModel> : DataSource {
     fun insert(dataModel: D): Completable
     fun insert(dataModels: List<D>): Completable
     fun update(dataModel: D): Completable

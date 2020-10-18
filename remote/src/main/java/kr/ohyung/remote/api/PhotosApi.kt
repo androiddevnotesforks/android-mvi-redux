@@ -16,12 +16,13 @@ interface PhotosApi : Api {
     fun getPhotos(
         @Query("page") page: Int?,
         @Query("per_page") perPage: Int?,
-        @Query("order_by") orderBy: String?
+        @Query("order_by") orderBy: String?,
+        @Query("client_id") clientId: String? = BuildConfig.API_KEY_UNSPLASH
     ): Single<List<PhotosResponse>>
 
     @GET("photos/random")
     fun getRandomPhoto(
         @Query("query") query: String?,
-        @Query("client_id") clientId: String? = BuildConfig.clientId
+        @Query("client_id") clientId: String? = BuildConfig.API_KEY_UNSPLASH
     ): Single<PhotosResponse>
 }

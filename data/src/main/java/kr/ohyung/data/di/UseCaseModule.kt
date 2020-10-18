@@ -5,7 +5,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import kr.ohyung.domain.executor.ExecutorProvider
+import kr.ohyung.domain.repository.LocationRepository
 import kr.ohyung.domain.repository.PhotoRepository
+import kr.ohyung.domain.repository.WeatherRepository
+import kr.ohyung.domain.usecase.GetCurrentLegalNameUseCase
+import kr.ohyung.domain.usecase.GetCurrentLocationForecastUseCase
 import kr.ohyung.domain.usecase.GetRandomPhotoUseCase
 import javax.inject.Singleton
 
@@ -22,5 +26,29 @@ object UseCaseModule {
         photoRepository = photoRepository,
         executorThread = executorProvider.io(),
         postExecutionThread = executorProvider.mainThread()
+    )
+
+    @Provides
+    @Singleton
+    fun provideGetCurrentLegalNameUseCase(
+        locationRepository: LocationRepository,
+        weatherRepository: WeatherRepository,
+        executorProvider: ExecutorProvider
+    ): GetCurrentLegalNameUseCase = GetCurrentLegalNameUseCase(
+        locationRepository = locationRepository,
+        weatherRepository =  weatherRepository,
+        executorProvider = executorProvider
+    )
+
+    @Provides
+    @Singleton
+    fun provideGetCurrentLocationForecastUseCase(
+        locationRepository: LocationRepository,
+        weatherRepository: WeatherRepository,
+        executorProvider: ExecutorProvider
+    ): GetCurrentLocationForecastUseCase = GetCurrentLocationForecastUseCase(
+        locationRepository = locationRepository,
+        weatherRepository = weatherRepository,
+        executorProvider = executorProvider
     )
 }
