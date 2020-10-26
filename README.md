@@ -19,18 +19,33 @@
 - [Github Action](https://github.com/features/actions)
 
 ## Features
+#### 0. About
+[Unsplash](https://unsplash.com/developers), [Naver ReverseGeocoding](https://docs.ncloud.com/ko/naveropenapi_v3/maps/reverse-geocoding/reverse-geocoding.html), [openWeatherMap](http://openweathermap.org/) 3가지 api를 사용하는 프로젝트입니다.
+GPS로 부터 현재 위치를 가져온 다음, openWeatherMap, geocoding api를 호출하여 현재 위치의 날씨, 온도와 법정동 주소를 받아오도록 합니다. 동시에, 현재 위치의 날씨(Rain, Heavy Rain, Clear 등등) 를 키워드로 검색하여 unsplash 이미지를 가져오도록 합니다. 북마크 기능을 제공하여, 마음에 드는 사진은 내부 저장소에 저장하고, 북마크만 따로 모아서 볼 수 있도록 제공합니다.
+
 #### 1. Clean Architecture
 <p>
  <img src="https://user-images.githubusercontent.com/37705123/97113823-16018700-1730-11eb-8f79-8887cc22126b.png" width="400" />
  <img src="https://user-images.githubusercontent.com/37705123/97113826-1863e100-1730-11eb-8c7c-e588244014ca.png" width="400" />
 </p>
-Presentation - Data - Domain 3개의 Layer로 구성되어 있고, Data Layer는 다시 Remote, Local Layer로 분리하였습니다.  
+Presentation - Data - Domain 3개의 Layer로 구성되어 있고, Data Layer는 다시 Remote, Local Layer로 분리하였습니다.
+
+- Domain
+
+비즈니스 로직(UseCase)을 처리하는 Layer로, 실질적인 데이터인 Entity와 Exception을 정의하고 프로그램의 동장 명세인 Repository Interface를 정의합니다.
+- Data
+
+Repository를 구현하면서 `데이터를 어디에서 가지고 올것인가`의 실제 동작을 수행하는 Layer입니다. 데이터가 실제로 위치하는 자료원인 DataSource를 정의 합니다. 편의상 Local, Remote Layer를 구분하지 않고 Data Layer에서 모두 처리할 수 도 있지만, 이번 프로젝트에서는 Local Layer, Remote Layer를 분리하면서 각자의 역할만 수행하도록 하였습니다. Local Layer에서는 Room을 사용해서 내부저장소에서 데이터를 가지고 오며, DataSource를 구현한 LocalDataSource가 위치합니다. Remote Layer에서는 Retrofit을 사용하여 외부API에서 데이터를 가지고 오며, RemoteDataSource가 위치합니다. 
+- Presentation
+
+사용자 입력, 화면 처리 같은 실제 사용자에게 보여지는 UI를 담당하는 Layer입니다. Domain Layer를 의존하고 있으며, ViewModel에서 UseCase단위로 로직을 처리합니다. 이번 프로젝트에서는 StateMachine이라는 상태처리기를 두어서 모든 앱의 로직 처리를 위임합니다.
+
 
 #### 2. MVI Architecture - similar to Redux
 <p>
  <img src="https://user-images.githubusercontent.com/37705123/97111060-037f5180-1720-11eb-8656-af4d48c889e8.png" width="400" />
 </p> 
-위 그림을 토대로 프로젝트의 구조를 설계 하였습니다.
+위 그림을 토대로 프로젝트의 구조를 설계 하였습니다. Android-MVI 아키텍처는 [React-redux](https://redux.js.org/)와 상당히 유사합니다.
 가장 중요한 개념은, 사용자가 화면을 클릭하는 행위 - 버튼클릭, 토글조작, 스크롤링 등등 - 를 `객체를 발행하는 행위`라고 규정하는 것입니다. 그리고, 사용자가 객체를 발행하는 행위가 기본적으로 앱의 상태를 변화시키고자 하는 의도를 나타낸다고 규정하고 이것을 `Intent` 라는 용어를 사용합니다.
 
 <p>
@@ -73,7 +88,7 @@ class HomeActionProcessor @Inject constructor(
 ```
 
 #### 3. Typography
-font, font-weight, font size를 미리 정의해두고, TextView, EditText 등과 같이 Text속성이 필요한 곳에서 요긴하게 사용할 수 있도록 합니다.
+font, font-weight, fontSize를 미리 정의해두고, TextView, EditText 등과 같이 Text속성이 필요한 곳에서 요긴하게 사용할 수 있도록 합니다.
 ```xml
 // 모든 Typography style에 공통 적용될 폰트, 색상, 속성 등을 정의
 <style name="Typography">
@@ -82,7 +97,7 @@ font, font-weight, font size를 미리 정의해두고, TextView, EditText 등�
     <item name="android:includeFontPadding">false</item>
 </style>
 
-// Font-weight에 따라서 fontSize, textStyle 정의
+// font-weight에 따라서 fontSize, textStyle 정의
 <style name="Typography.400">
     <item name="android:textSize" tools:ignore="SpUsage">@dimen/text_size16</item>
     <item name="android:textStyle">normal</item>
@@ -113,7 +128,6 @@ State 관점으로 설계하는 디자인 패턴으로는 [상태패턴](https:/
 주의 해야할 점 중 하나는, 각각의 상태는 불변객체로 정의하고, 새로 만들어진 상태와 이전 상태를 구분하기 위해서 새로운 상태객체를 발행할때는 반드시 새로운 객체를 반환해야한다는 점입니다.
 
 #### 2. 근본적으로 MVI 아키텍처는 어떠한 장점을 가져다 주는가? 혹은 단점은 무엇이 있을까?
-눈치가 빠르다면, 이미 짐작했겠지만, Android-MVI 아키텍처는 [React-redux](https://redux.js.org/)와 상당히 유사하다. 참고하기 바랍니다.
 MVI 아키텍처에서는 단방향 데이터 흐름(Uni-Directional Data Flow), 상태 불변성을 장점으로 내세우고 있습니다.
 
 사용자로 부터 View Intent를 받고, `IntentProcessor -> ActionProcessor -> Reducer -> new State` 과정에서 데이터가 단방향으로만 흐르기 때문에, 확실히!! 앱의 로직흐름을 명확하게 이해할 수 있다는 장점이 있습니다. 마찮가지로 각자의 구성요소만 별도로 테스트 하면 되기 떄문에, 문제가 발생했을때 빠르게 디버깅할 수 있습니다.
