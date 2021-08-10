@@ -1,4 +1,4 @@
-## [DEPRECATED] 
+## [Warnings] 
 #### *I think the redux pattern used in this project is inefficient to production level. So please use it for reference.*
 
 # android-mvi-redux
