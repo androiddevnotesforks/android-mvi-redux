@@ -1,5 +1,5 @@
 ## [DEPRECATED] 
-I think the redux pattern used in this project is inefficient to production level. So please use it for reference.
+#### *I think the redux pattern used in this project is inefficient to production level. So please use it for reference.*
 
 # android-mvi-redux
 ![MVI, CleanArchitecture](https://img.shields.io/badge/Architecture-MVI,%20Clean%20Architecture-brightgreen) ![Dagger](https://img.shields.io/badge/Dagger-Hilt-brightgreen)
